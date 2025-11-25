@@ -1,10 +1,5 @@
 import React from "react";
-
-interface StatsCardProps {
-  value: string | number;
-  label: string;
-  sublabel?: string;
-}
+import {StatsCardProps} from '../../types/index'
 
 const StatsCard: React.FC<StatsCardProps> = ({ value, label, sublabel }) => {
   return (

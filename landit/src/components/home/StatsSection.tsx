@@ -2,7 +2,6 @@ import React from 'react'
 import StatsCard from '../home/StatsCard'
 import TestimonialCard from '../home/TestimonialCard'
 
-
 const StatsSection = () => {
   const stats = [
     {

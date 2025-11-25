@@ -10,7 +10,7 @@ interface ParagraphProps {
 export default function Paragraph({ 
   children, 
   variant = 'default',
-  align = 'left',
+  align = 'center',
   className = '' 
 }: ParagraphProps) {
   const baseClasses = 'leading-relaxed';

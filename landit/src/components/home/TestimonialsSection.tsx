@@ -1,5 +1,7 @@
 import React from 'react'
 import UserTestimonialCard from './UserTestimonialCard';
+import {Heading} from '../common/text/index'
+
 
 const TestimonialsSection = () => {
   const testimonials = [
@@ -39,9 +41,9 @@ const TestimonialsSection = () => {
     <section className="py-20 px-6 bg-gray-50">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <Heading className="text-4xl md:text-5xl font-bold mb-4">
             <span className="text-purple-600">👥 Trusted by job seekers</span> at top companies
-          </h2>
+          </Heading>
           <p className="text-xl text-gray-700">
             see how LandIT has helped professionals land their dream job
           </p>

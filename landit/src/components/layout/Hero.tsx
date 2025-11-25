@@ -1,13 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Container } from '../ui/Container';
 import { useTheme } from '../common/ThemeContext';
-
-interface HeroProps {
-  title: ReactNode;
-  subtitle?: ReactNode;
-  description?: ReactNode;
-  cta: ReactNode;
-}
+import {HeroProps} from '../../types/index'
+import {Heading,Paragraph,Text} from '../common/text/index'
 
 export const Hero: React.FC<HeroProps> = ({ title, subtitle, description, cta }) => {
   const { isDark } = useTheme();
@@ -20,17 +15,17 @@ export const Hero: React.FC<HeroProps> = ({ title, subtitle, description, cta })
     }`}>
       <Container>
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className={`text-5xl font-bold mb-6 ${
+          <Heading className={`text-5xl font-bold mb-6 ${
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
             {title}
-          </h1>
+          </Heading>
           {subtitle && (
-            <p className={`text-xl mb-8 ${
+            <Paragraph className={`text-xl mb-8 ${
               isDark ? 'text-gray-300' : 'text-gray-800'
             }`}>
               {subtitle}
-            </p>
+            </Paragraph>
           )}
           {description && (
             <p className={`text-lg mb-10 leading-relaxed ${

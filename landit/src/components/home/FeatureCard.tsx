@@ -1,11 +1,5 @@
 import React from 'react'
-
-interface FeatureCardProp{
-    icon:string;
-    title:string;
-    description:string;
-    color:string
-}
+import {FeatureCardProp} from '../../types/index'
 
 const FeatureCard: React.FC<FeatureCardProp> = ({ icon, title, description, color }) => {
   return (

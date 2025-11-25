@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 interface HeadingProps {
-  level: 1 | 2 | 3 | 4 | 5 | 6;
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
   children: ReactNode;
   variant?: 'primary' | 'secondary' | 'muted';
   align?: 'left' | 'center' | 'right';
