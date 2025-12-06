@@ -50,12 +50,20 @@ export default defineSchema({
     completed: v.boolean(),
   }),
   jobDescriptions: defineTable({
-    userId: v.string(),
-    title: v.string(),
-    description: v.string(),
-    requirements: v.array(v.string()),
-    createdAt: v.number(),
-  }).index("by_user", ["userId"]),
+  userId: v.string(),
+  title: v.string(),
+  company: v.optional(v.string()),
+  description: v.string(),
+  requirements: v.array(v.string()),
+  skills: v.array(v.string()),
+  experienceLevel: v.string(), // "entry" | "mid" | "senior" | "lead"
+  jobType: v.string(), // "full-time" | "part-time" | "contract" | "internship"
+  location: v.optional(v.string()),
+  salary: v.optional(v.string()),
+  isActive: v.boolean(),
+  createdAt: v.number(),
+  updatedAt: v.number(),
+}).index("by_user", ["userId"]),
 
   questions: defineTable({
     text: v.string(),
