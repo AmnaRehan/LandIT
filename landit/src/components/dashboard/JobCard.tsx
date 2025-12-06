@@ -14,7 +14,7 @@ const jobLinks: Record<string, string> = {
   "1": "/questions",
   "2": "/interview",
   "3": "/resume",
-  "4": "/updateJob",
+  "4": "/job-description",
 };
 
 export const JobCard: React.FC<JobCardProps> = ({ title, icon, id }) => {

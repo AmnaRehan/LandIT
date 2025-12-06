@@ -45,18 +45,25 @@ export const submitAnswer = mutation({
     questionId: v.string(),
     userId: v.string(),
     answer: v.string(),
-    isCorrect: v.boolean(),
-    score: v.number(),
-    feedback: v.string(),
+    isCorrect: v.optional(v.boolean()),
+    score: v.optional(v.number()),  // or v.float64()
+    feedback: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const answerId = await ctx.db.insert("userAnswers", {
-      ...args,
+      userId: args.userId,
+      questionId: args.questionId,
+      answer: args.answer,
+      isCorrect: args.isCorrect ?? false,
+      score: args.score ?? 0,
+      feedback: args.feedback ?? "",
       submittedAt: Date.now(),
     });
     return answerId;
   },
 });
+
+
 
 export const getUserAnswers = query({
   args: {
@@ -143,7 +150,10 @@ Format as JSON array:
         throw new Error("Invalid response structure from AI");
       }
 
-      const responseText = data.content[0].text;
+     if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
+  throw new Error("Invalid response structure from Gemini API");
+}
+const responseText = data.candidates[0].content.parts[0].text;
       
       // Parse JSON from response
       const jsonMatch = responseText.match(/\[[\s\S]*\]/);

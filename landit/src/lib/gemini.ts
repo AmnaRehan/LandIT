@@ -18,38 +18,56 @@ Provide evaluation in JSON format ONLY:
 
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.NEXT_PUBLIC_GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.NEXT_PUBLIC_GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: prompt }],
-            },
-          ],
+          contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.3,
-            maxOutputTokens: 500,
+            maxOutputTokens: 5000,
           },
         }),
       }
     );
 
-    const data = await response.json();
-    const responseText = data.candidates[0].content.parts[0].text;
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-    const result = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+    if (!response.ok) {
+      throw new Error(`Gemini API error: ${response.status}`);
+    }
 
-    return (
-      result || {
-        isCorrect: false,
-        score: 0,
-        feedback: "Unable to evaluate answer.",
-      }
-    );
+    const data = await response.json();
+
+    // FIXED: Correct path to response text
+    const responseText =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+
+    let result;
+    try {
+      // Extract JSON object from AI output
+      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      result = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+    } catch (err) {
+      console.error("Failed to parse AI evaluation JSON:", responseText, err);
+      result = null;
+    }
+
+    // Validate the result has expected properties
+    if (result && typeof result === 'object') {
+      return {
+        isCorrect: result.isCorrect ?? false,
+        score: typeof result.score === 'number' ? result.score : 0,
+        feedback: result.feedback || "Unable to evaluate answer.",
+      };
+    }
+
+    return {
+      isCorrect: false,
+      score: 0,
+      feedback: "Unable to evaluate answer.",
+    };
   } catch (error) {
     console.error("Error evaluating answer:", error);
     return {
