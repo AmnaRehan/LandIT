@@ -24,15 +24,6 @@ export default defineSchema({
   }).index("by_user", ["userId"]),
 
   // -------------------------
-  // QUESTIONS TABLE
-  // -------------------------
-  questions: defineTable({
-    jobInfoId: v.id("job_info"), // foreign key to job_info
-    text: v.string(),
-    difficulty: v.string(),      // e.g., "easy", "medium", "hard"
-  }).index("by_job_info", ["jobInfoId"]),
-
-  // -------------------------
   // INTERVIEWS TABLE
   // -------------------------
   interviews: defineTable({
@@ -43,4 +34,47 @@ export default defineSchema({
   })
     .index("by_job_info", ["jobInfoId"])
     .index("by_hume_chat", ["humeChatId"]),
+
+  activities: defineTable({
+    userId: v.string(),
+    questions: v.number(),
+    correct: v.number(),
+    incorrect: v.number(),
+    year: v.number(),
+  }),
+  
+  jobActions: defineTable({
+    userId: v.string(),
+    title: v.string(),
+    icon: v.string(),
+    completed: v.boolean(),
+  }),
+  jobDescriptions: defineTable({
+    userId: v.string(),
+    title: v.string(),
+    description: v.string(),
+    requirements: v.array(v.string()),
+    createdAt: v.number(),
+  }).index("by_user", ["userId"]),
+
+  questions: defineTable({
+    text: v.string(),
+    difficulty: v.string(), // "easy" | "medium" | "hard"
+    type: v.string(), // "multiple-choice" | "text"
+    options: v.optional(v.array(v.string())),
+    correctAnswer: v.optional(v.string()),
+    jobDescriptionId: v.string(),
+    createdAt: v.number(),
+  }).index("by_job_and_difficulty", ["jobDescriptionId", "difficulty"]),
+
+  userAnswers: defineTable({
+    questionId: v.string(),
+    userId: v.string(),
+    answer: v.string(),
+    isCorrect: v.boolean(),
+    score: v.number(),
+    feedback: v.string(),
+    submittedAt: v.number(),
+  }).index("by_user_and_question", ["userId", "questionId"])
 });
+

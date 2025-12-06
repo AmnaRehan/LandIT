@@ -9,12 +9,24 @@ interface HeadingProps {
 }
 
 export default function Heading({ 
-  level, 
+  level = 1,
   children, 
   variant = 'primary',
   align = 'left',
   className = '' 
 }: HeadingProps) {
+
+  const tagMap = {
+    1: "h1",
+    2: "h2",
+    3: "h3",
+    4: "h4",
+    5: "h5",
+    6: "h6"
+  } as const;
+
+  const HeadingTag = tagMap[level];
+
   const baseClasses = 'font-bold leading-tight';
   
   const sizeClasses = {
@@ -37,10 +49,8 @@ export default function Heading({
     center: 'text-center',
     right: 'text-right'
   };
-  
+
   const combinedClasses = `${baseClasses} ${sizeClasses[level]} ${variantClasses[variant]} ${alignClasses[align]} ${className}`;
-  
-  const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
   
   return (
     <HeadingTag className={combinedClasses}>
