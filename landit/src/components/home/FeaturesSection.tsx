@@ -24,10 +24,10 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-white">
+    <section className="py-20 px-6 bg-gradient-to-b from-white to-gray-100 dark:from-purple-300  dark:to-purple-600 transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
-          Take your best shot at <span className="text-purple-600">Landing IT</span>
+        <h2 className="text-4xl md:text-5xl font-medium text-center mb-4">
+          Take your best shot at <span className="text-purple-600 ">Landing IT</span>
         </h2>
         <p className="text-xl text-gray-700 text-center mb-16 max-w-2xl mx-auto">
           Turn job hunting from stressful to straightforward with AI that does the heavy lifting for you
