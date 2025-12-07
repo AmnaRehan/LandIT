@@ -1,10 +1,5 @@
-import React from 'react'
+import InterviewPage from '@/components/ui/InterviewPage';
 
-const page = () => {
-  return (
-    <div>
-        Interview Page
-    </div>
-  )
+export default function Interview() {
+  return <InterviewPage />;
 }
-export default page
