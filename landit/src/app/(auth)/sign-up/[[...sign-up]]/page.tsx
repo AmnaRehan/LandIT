@@ -21,6 +21,7 @@ const SignUpPage = () => {
           }}
         />
       </main>
+      <ThemeToggle />
     </div>
   );
 };

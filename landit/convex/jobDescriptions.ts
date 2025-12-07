@@ -14,6 +14,7 @@ export const getAllJobDescriptions = query({
   },
 });
 
+
 export const getCurrentJobDescription = query({
   args: { userId: v.string() },
   handler: async (ctx, args) => {
@@ -212,5 +213,39 @@ Format as JSON:
       console.error("Error generating job description:", error);
       throw new Error("Failed to generate job description");
     }
+  },
+});
+
+// Debug query - see ALL jobs regardless of user
+export const debugGetAllJobs = query({
+  args: {},
+  handler: async (ctx) => {
+    const allJobs = await ctx.db.query("jobDescriptions").collect();
+    return allJobs.map(job => ({
+      id: job._id,
+      title: job.title,
+      userId: job.userId,
+    }));
+  },
+});
+
+// One-time fix mutation
+export const fixJobUserIds = mutation({
+  args: {
+    correctUserId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Get all jobs with wrong userId
+    const allJobs = await ctx.db.query("jobDescriptions").collect();
+    
+    let updated = 0;
+    for (const job of allJobs) {
+      if (job.userId !== args.correctUserId) {
+        await ctx.db.patch(job._id, { userId: args.correctUserId });
+        updated++;
+      }
+    }
+    
+    return { message: `Updated ${updated} jobs to userId: ${args.correctUserId}` };
   },
 });

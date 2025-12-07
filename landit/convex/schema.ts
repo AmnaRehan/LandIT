@@ -23,17 +23,7 @@ export default defineSchema({
     userId: v.id("users"),        // reference to users table
   }).index("by_user", ["userId"]),
 
-  // -------------------------
-  // INTERVIEWS TABLE
-  // -------------------------
-  interviews: defineTable({
-    jobInfoId: v.id("job_info"),
-    duration: v.optional(v.string()),
-    humeChatId: v.string(),
-    feedback: v.string(),
-  })
-    .index("by_job_info", ["jobInfoId"])
-    .index("by_hume_chat", ["humeChatId"]),
+
 
   activities: defineTable({
     userId: v.string(),
@@ -42,6 +32,32 @@ export default defineSchema({
     incorrect: v.number(),
     year: v.number(),
   }),
+
+    resumes: defineTable({
+    userId: v.string(),
+    jobDescriptionId: v.string(),
+    fileName: v.string(),
+    fileSize: v.number(),
+    fileType: v.string(),
+    storageId: v.string(), // Reference to Convex file storage
+    uploadedAt: v.number(),
+    analyzed: v.boolean(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_and_job", ["userId", "jobDescriptionId"])
+    .index("by_job", ["jobDescriptionId"]),
+
+  resumeAnalyses: defineTable({
+    resumeId: v.string(),
+    analysisData: v.string(), // JSON stringified full analysis
+    score: v.number(), // Overall score 0-10
+    atsScore: v.number(), // ATS compatibility 0-100
+    jobMatchScore: v.number(), // Job match 0-100
+    analyzedAt: v.number(),
+  })
+    .index("by_resume", ["resumeId"])
+    .index("by_score", ["score"]),
+
   
   jobActions: defineTable({
     userId: v.string(),
@@ -75,6 +91,52 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_job_and_difficulty", ["jobDescriptionId", "difficulty"]),
 
+   interviews: defineTable({
+    userId: v.string(),
+    jobDescriptionId: v.optional(v.string()),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("in_progress"),
+      v.literal("completed"),
+      v.literal("failed")
+    ),
+    vapiCallId: v.optional(v.string()),
+    duration: v.optional(v.number()), // in seconds
+    questionsAsked: v.number(),
+    startedAt: v.number(),
+    completedAt: v.optional(v.number()),
+    transcript: v.optional(v.string()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_and_job", ["userId", "jobDescriptionId"])
+    .index("by_status", ["status"]),
+
+  interviewFeedback: defineTable({
+    interviewId: v.string(),
+    overallScore: v.number(), // out of 10
+    strengths: v.array(v.string()),
+    areasToImprove: v.array(v.string()),
+    performanceBreakdown: v.object({
+      technicalKnowledge: v.number(),
+      problemSolving: v.number(),
+      confidenceLevel: v.number(),
+      answerStructure: v.number(),
+    }),
+    nextSteps: v.array(v.string()),
+    detailedFeedback: v.string(),
+    analyzedAt: v.number(),
+  }).index("by_interview", ["interviewId"]),
+
+  interviewQuestions: defineTable({
+    interviewId: v.string(),
+    questionNumber: v.number(),
+    question: v.string(),
+    userAnswer: v.string(),
+    evaluationScore: v.optional(v.number()),
+    feedback: v.optional(v.string()),
+    askedAt: v.number(),
+  }).index("by_interview", ["interviewId"]),
+
   userAnswers: defineTable({
     questionId: v.string(),
     userId: v.string(),
@@ -83,6 +145,6 @@ export default defineSchema({
     score: v.number(),
     feedback: v.string(),
     submittedAt: v.number(),
-  }).index("by_user_and_question", ["userId", "questionId"])
+  }).index("by_user_and_question", ["userId", "questionId"]),
 });
 

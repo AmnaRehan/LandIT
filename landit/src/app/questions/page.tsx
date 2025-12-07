@@ -1,14 +1,16 @@
 "use client";
 import React from "react";
+import { useUser } from "@clerk/nextjs";
 import { DifficultySelector } from "@/components/questions/difficultySelector";
 import { QuestionList } from "@/components/questions/QuestionList";
 import { useQuestions } from "@/hooks/useQuestions";
 import { Button } from "@/components/ui/Button";
 
 export default function QuestionsPage() {
-  // Replace with actual user ID from auth
-  const userId = "user_123";
+  const { user, isLoaded } = useUser();
 
+  // Pass userId to hook only when available
+  const userId = user?.id ?? ""; // use empty string until loaded
   const {
     difficulty,
     setDifficulty,
@@ -18,6 +20,11 @@ export default function QuestionsPage() {
     generateQuestions,
     submitAnswer,
   } = useQuestions(userId);
+
+  // Show loading until user is available
+  if (!isLoaded || !user) {
+    return <div>Loading...</div>;
+  }
 
   const handleSubmitAnswer = async (
     questionId: string,
@@ -29,7 +36,7 @@ export default function QuestionsPage() {
     try {
       await submitAnswer({
         questionId,
-        userId,
+        userId: user.id, // now guaranteed to exist
         answer,
         score,
         feedback,

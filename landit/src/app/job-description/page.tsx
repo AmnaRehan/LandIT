@@ -6,9 +6,11 @@ import { JobDescriptionList } from "@/components/job-description/JobDescriptionL
 import { EmptyState } from "@/components/job-description/EmptyState";
 import { Button } from "@/components/ui/Button";
 import { JobDescriptionFormData } from "@/types/job-description";
+import { useUser } from "@clerk/nextjs";
 
 export default function JobDescriptionPage() {
-  const userId = "user_123"; // Replace with actual auth
+  const { user } = useUser();
+  const userId = user?.id ?? ""; // Replace with actual auth
   const [showForm, setShowForm] = useState(false);
 
   const {

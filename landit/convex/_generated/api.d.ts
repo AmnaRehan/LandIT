@@ -9,8 +9,10 @@
  */
 
 import type * as dashboard from "../dashboard.js";
+import type * as interview from "../interview.js";
 import type * as jobDescriptions from "../jobDescriptions.js";
 import type * as questions from "../questions.js";
+import type * as resume from "../resume.js";
 
 import type {
   ApiFromModules,
@@ -20,8 +22,10 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   dashboard: typeof dashboard;
+  interview: typeof interview;
   jobDescriptions: typeof jobDescriptions;
   questions: typeof questions;
+  resume: typeof resume;
 }>;
 
 /**
